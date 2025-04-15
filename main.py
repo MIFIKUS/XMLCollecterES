@@ -108,7 +108,7 @@ while True:
             gtd = re.search(r'\| €(.*?) Gtd', name)
 
             if not gtd:
-                gtd = re.search(r'\| €(.*?) Gtd', name)
+                gtd = re.search(r', €(.*?) Gtd', name)
 
             gtd = '€' + gtd.group(0).strip()
 
