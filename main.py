@@ -1,3 +1,4 @@
+import re
 import traceback
 import xml.etree.ElementTree as ET
 import mysql.connector
@@ -95,13 +96,21 @@ while True:
                     break
             game = tournament.find("ns:game", ns).text
             play_money = tournament.attrib.get('play_money')
+
             if game != "Hold'em" or play_money == 'true' or skip:
                 continue
+
             tournament_id = tournament.attrib['id']
             name = tournament.find("ns:name", ns).text
-            print(tournament.attrib.get('prize'))
-            gtd = '€' + str(int(float(tournament.attrib.get('prize').replace('€', ''))))
+            gtd = re.search(r'\| €(.*?) Gtd', name)
+
+            if not gtd:
+                gtd = re.search(r'\| €(.*?) Gtd', name)
+
+            gtd = '€' + gtd.group(0).strip()
+
             name = name.split(', €')
+
             if len(name) > 1:
                 name = ', €'.join(name[:-1])
             else:
