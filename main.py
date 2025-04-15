@@ -112,12 +112,12 @@ while True:
 
             gtd = '€' + gtd.group(1).strip()
 
-            name = name.split(', €')
+            name_temp = name.split(', €')
 
-            if len(name) > 1:
-                name = ', €'.join(name[:-1])
+            if len(name_temp) > 1:
+                name = ', €'.join(name_temp[:-1])
             else:
-                name = ', €'.join(name[:-1]).split('| €')[0]
+                name = name.split('| €')[0]
 
             date = tournament.find("ns:start_date", ns).text
             buy_in = tournament.find("ns:buy_in_fee", ns).text
