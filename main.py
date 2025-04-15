@@ -110,7 +110,7 @@ while True:
             if not gtd:
                 gtd = re.search(r', €(.*?) Gtd', name)
 
-            gtd = '€' + gtd.group(0).strip()
+            gtd = '€' + gtd.group(1).strip()
 
             name = name.split(', €')
 
