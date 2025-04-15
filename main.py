@@ -102,6 +102,7 @@ while True:
 
             tournament_id = tournament.attrib['id']
             name = tournament.find("ns:name", ns).text
+            print(name)
             gtd = re.search(r'\| €(.*?) Gtd', name)
 
             if not gtd:
