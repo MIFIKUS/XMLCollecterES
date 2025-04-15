@@ -117,7 +117,7 @@ while True:
             if len(name) > 1:
                 name = ', €'.join(name[:-1])
             else:
-                name = ''.join(name).replace('  ', '').split(',€')[0]
+                name = ', €'.join(name[:-1]).split('| €')[0]
 
             date = tournament.find("ns:start_date", ns).text
             buy_in = tournament.find("ns:buy_in_fee", ns).text
