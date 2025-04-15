@@ -90,7 +90,7 @@ while True:
 
         for tournament in root.findall("ns:tournament", ns):
             skip = False
-            for lobby in tournament.findall("ns:lobby[@type='COM']", ns):
+            for lobby in tournament.findall("ns:lobby[@type='ES']", ns):
                 if lobby.attrib['path'] == 'Tourney:Satellite:All' or lobby.attrib['path'] == 'Tourney:Freeroll':
                     skip = True
                     break
