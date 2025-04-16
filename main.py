@@ -103,14 +103,17 @@ while True:
             tournament_id = tournament.attrib['id']
             name = tournament.find("ns:name", ns).text
             print(name)
-            if 'Zoom' in name or 'Seats' in name or 'Phase' in name:
+            if 'Zoom' in name or 'Seats' in name or 'Phase' in name or 'STEP' in name:
                 continue
             gtd = re.search(r'\| €(.*?) Gtd', name)
 
             if not gtd:
                 gtd = re.search(r', €(.*?) Gtd', name)
 
-            gtd = '€' + gtd.group(1).strip()
+            if not gtd:
+                gtd = '0'
+            else:
+                gtd = '€' + gtd.group(1).strip()
 
             name_temp = name.split(', €')
 
