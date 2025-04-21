@@ -180,6 +180,7 @@ while True:
 
             name = fix_name(name)
             print(output)
+            name = name.strip()
 
             tournaments_to_load.append(
                 (tournament_id, name, gtd, buy_in, total_buy_in, amount_of_players, speed, tournament_type, date))
