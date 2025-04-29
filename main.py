@@ -159,7 +159,7 @@ while True:
             if 'mystery' in name.lower() or 'Cryptic' in name or 'Enigma' in name:
                 tournament_type = 'MYSTERY'
             elif 'Mystery Bounty' not in name:
-                if 'Bounty' in name or 'PKO' in name or 'Progressive KO' in name or 'Super KO' in name or 'Ultra KO' in name or 'Total KO' in name or 'Thunder' in name or 'Storm' in name or 'Sunday Special' in name or 'Slam' in name or 'Night on Stars' in name or 'Blaze' in name:
+                if 'Bounty' in name or 'PKO' in name or 'Progressive KO' in name or 'Super KO' in name or 'Ultra KO' in name or 'Total KO' in name or 'Thunder' in name or 'Storm' in name or 'Sunday Special' in name or 'Slam' in name or 'Night on Stars' in name or 'Blaze' in name or 'Knockout' in name:
                     tournament_type = 'KO'
                 else:
                     tournament_type = 'FREEZE'
