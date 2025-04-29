@@ -111,6 +111,12 @@ while True:
                 gtd = re.search(r', €(.*?) Gtd', name)
 
             if not gtd:
+                gtd = re.search(r', €(.*?) guarantted', name)
+
+            if not gtd:
+                gtd = re.search(r'\| €(.*?) guarantted', name)
+
+            if not gtd:
                 gtd = '0'
             else:
                 gtd = '€' + gtd.group(1).strip()
