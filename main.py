@@ -111,10 +111,10 @@ while True:
                 gtd = re.search(r', €(.*?) Gtd', name)
 
             if not gtd:
-                gtd = re.search(r', €(.*?) guarantted', name)
+                gtd = re.search(r', €(.*?) guaranteed', name)
 
             if not gtd:
-                gtd = re.search(r'\| €(.*?) guarantted', name)
+                gtd = re.search(r'\| €(.*?) guaranteed', name)
 
             if not gtd:
                 gtd = '0'
