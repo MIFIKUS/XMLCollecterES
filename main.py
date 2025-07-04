@@ -78,6 +78,24 @@ def fix_comma_in_db():
     cursor = get_cursor()
     cursor.execute(query)
 
+def fix_tournament_info():
+    query = """
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'TURBO') WHERE NAME LIKE '%Ultra KO €10%' AND gtd = '€1,000';
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'TURBO') WHERE NAME LIKE '%Progressive KO €50 [6-Max]%' AND gtd = '€1,000';
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'TURBO') WHERE NAME LIKE '%Progressive KO €50 [6-Max]%' AND gtd = '€2,000';
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'TURBO') WHERE NAME LIKE '%Progressive KO €20 [6-Max]%' AND gtd = '€1,000';
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'TURBO') WHERE NAME LIKE '%Progressive KO €10 [6-Max]%' AND gtd = '€1,000';
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'TURBO') WHERE NAME LIKE '%Progressive KO €10 [6-Max]%' AND gtd = '€750';
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'TURBO') WHERE NAME LIKE '%Progressive KO €5 [6-Max]%' AND gtd = '€1,000';
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'TURBO') WHERE NAME LIKE '%Bounty Builder €50' AND gtd = '€1,500';
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'TURBO') WHERE NAME LIKE '%Bounty Builder €5' AND gtd = '€1,000' AND DATE > '2025-01-14';
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'HYPER') WHERE NAME LIKE '%Bounty Builder €10' AND gtd = '€2,000';
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'HYPER') WHERE NAME LIKE '%Frenetik Mystery €10 (25BB)%';
+UPDATE pokerstars_es.xml SET speed = REPLACE(speed, 'REG', 'HYPER') WHERE NAME LIKE '%Frenetik Mystery €5 (25BB)%';
+"""
+    cursor = get_cursor()
+    cursor.execute(query)
+
 
 tournaments_to_load = []
 
@@ -199,6 +217,7 @@ while True:
 
         print('Турниры кончились')
         #fix_comma_in_db()
+        fix_tournament_info()
         tournaments_to_load = []
         time.sleep(900)
     except Exception as e:
