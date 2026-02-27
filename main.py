@@ -111,114 +111,116 @@ while True:
         ns = {"ns": "http://feed.pokerstars.com/TournamentFeed/2007"}
 
         for tournament in root.findall("ns:tournament", ns):
-            skip = False
-            for lobby in tournament.findall("ns:lobby[@type='ES']", ns):
-                if lobby.attrib['path'] == 'Tourney:Satellite:All' or lobby.attrib['path'] == 'Tourney:Freeroll':
-                    skip = True
-                    break
-            game = tournament.find("ns:game", ns).text
-            play_money = tournament.attrib.get('play_money')
+            try:
+                skip = False
+                for lobby in tournament.findall("ns:lobby[@type='ES']", ns):
+                    if lobby.attrib['path'] == 'Tourney:Freeroll':
+                        skip = True
+                        break
+                game = tournament.find("ns:game", ns).text
+                play_money = tournament.attrib.get('play_money')
 
-            if game != "Hold'em" or play_money == 'true' or skip:
-                continue
+                if game != "Hold'em" or play_money == 'true' or skip:
+                    continue
 
-            tournament_id = tournament.attrib['id']
-            name = tournament.find("ns:name", ns).text
-            print(name)
-            if 'Zoom' in name or 'Seats' in name or 'Phase' in name or 'STEP' in name:
-                continue
-            gtd = re.search(r'\| €(.*?) Gtd', name)
+                tournament_id = tournament.attrib['id']
+                name = tournament.find("ns:name", ns).text
+                print(name)
+                if 'Zoom' in name or 'Seats' in name or 'Phase' in name or 'STEP' in name:
+                    continue
+                gtd = re.search(r'\| €(.*?) Gtd', name)
 
-            if not gtd:
-                gtd = re.search(r', €(.*?) Gtd', name)
+                if not gtd:
+                    gtd = re.search(r', €(.*?) Gtd', name)
 
-            if not gtd:
-                gtd = re.search(r', €(.*?) guaranteed', name)
+                if not gtd:
+                    gtd = re.search(r', €(.*?) guaranteed', name)
 
-            if not gtd:
-                gtd = re.search(r'\| €(.*?) guaranteed', name)
+                if not gtd:
+                    gtd = re.search(r'\| €(.*?) guaranteed', name)
 
-            if not gtd:
-                gtd = '0'
-            else:
-                gtd = '€' + gtd.group(1).strip()
+                if not gtd:
+                    gtd = '0'
+                else:
+                    gtd = '€' + gtd.group(1).strip()
 
-            name_temp = name.split(', €')
+                name_temp = name.split(', €')
 
-            if len(name_temp) > 1:
-                name = ', €'.join(name_temp[:-1])
-            else:
-                name = name.split('| €')[0]
+                if len(name_temp) > 1:
+                    name = ', €'.join(name_temp[:-1])
+                else:
+                    name = name.split('| €')[0]
 
-            date = tournament.find("ns:start_date", ns).text
-            buy_in = tournament.find("ns:buy_in_fee", ns).text
-            buy_in_values = buy_in.replace('€', '').replace(' ', '').split('+')
+                date = tournament.find("ns:start_date", ns).text
+                buy_in = tournament.find("ns:buy_in_fee", ns).text
+                buy_in_values = buy_in.replace('€', '').replace(' ', '').split('+')
 
-            # Преобразуем каждое значение в целое число и суммируем
-            total_buy_in_value = sum(float(value) for value in buy_in_values)
+                # Преобразуем каждое значение в целое число и суммируем
+                total_buy_in_value = sum(float(value) for value in buy_in_values)
 
-            if total_buy_in_value.is_integer():
-                total_buy_in_value = int(total_buy_in_value)
-                total_buy_in = f'€{total_buy_in_value}'
-            else:
-                total_buy_in = f'€{total_buy_in_value:.2f}'
-            # Форматируем итоговую строку
+                if total_buy_in_value.is_integer():
+                    total_buy_in_value = int(total_buy_in_value)
+                    total_buy_in = f'€{total_buy_in_value}'
+                else:
+                    total_buy_in = f'€{total_buy_in_value:.2f}'
+                # Форматируем итоговую строку
 
-            amount_of_players = tournament.find("ns:max_table_players", ns).text
+                amount_of_players = tournament.find("ns:max_table_players", ns).text
 
-            speed = None
+                speed = None
 
-            for hyper_string in HYPER:
-                if hyper_string in name:
-                    speed = 'HYPER'
-                    break
-
-            # Если в первом цикле ничего не найдено, проверяем TURBO
-            if speed is None:
-                for turbo_string in TURBO:
-                    if turbo_string in name:
-                        speed = 'TURBO'
+                for hyper_string in HYPER:
+                    if hyper_string in name:
+                        speed = 'HYPER'
                         break
 
-            if speed is None:
-                speed = 'REG'
+                # Если в первом цикле ничего не найдено, проверяем TURBO
+                if speed is None:
+                    for turbo_string in TURBO:
+                        if turbo_string in name:
+                            speed = 'TURBO'
+                            break
 
-            print(name)
-            if 'mystery' in name.lower() or 'Cryptic' in name or 'Enigma' in name:
-                tournament_type = 'MYSTERY'
-            elif 'Mystery Bounty' not in name:
-                if 'Bounty' in name or 'PKO' in name or 'Progressive KO' in name or 'Super KO' in name or 'Ultra KO' in name or 'Total KO' in name or 'Thunder' in name or 'Storm' in name or 'Sunday Special' in name or 'Slam' in name or 'Night on Stars' in name or 'Blaze' in name or 'Knockout' in name:
-                    tournament_type = 'KO'
+                if speed is None:
+                    speed = 'REG'
+
+                print(name)
+                if 'mystery' in name.lower() or 'Cryptic' in name or 'Enigma' in name:
+                    tournament_type = 'MYSTERY'
+                elif 'Mystery Bounty' not in name:
+                    if 'Bounty' in name or 'PKO' in name or 'Progressive KO' in name or 'Super KO' in name or 'Ultra KO' in name or 'Total KO' in name or 'Thunder' in name or 'Storm' in name or 'Sunday Special' in name or 'Slam' in name or 'Night on Stars' in name or 'Blaze' in name or 'Knockout' in name:
+                        tournament_type = 'KO'
+                    else:
+                        tournament_type = 'FREEZE'
                 else:
                     tournament_type = 'FREEZE'
-            else:
-                tournament_type = 'FREEZE'
 
-            output = (
-                f"Tournament ID: {tournament_id}\n"
-                f"Name: {name}\n"
-                f"Date: {date}\n"
-                f"Game: {game}\n"
-                f"Buy-in: {buy_in}\n"
-                f"Total Buy-in: {total_buy_in}\n"
-                f"Max Players: {amount_of_players}\n"
-                f"Speed: {speed}\n"
-                f"Tournament Type: {tournament_type}\n"
-            )
+                output = (
+                    f"Tournament ID: {tournament_id}\n"
+                    f"Name: {name}\n"
+                    f"Date: {date}\n"
+                    f"Game: {game}\n"
+                    f"Buy-in: {buy_in}\n"
+                    f"Total Buy-in: {total_buy_in}\n"
+                    f"Max Players: {amount_of_players}\n"
+                    f"Speed: {speed}\n"
+                    f"Tournament Type: {tournament_type}\n"
+                )
 
-            name = fix_name(name)
-            print(output)
-            name = name.strip()
+                name = fix_name(name)
+                print(output)
+                name = name.strip()
 
-            tournaments_to_load.append(
-                (tournament_id, name, gtd, buy_in, total_buy_in, amount_of_players, speed, tournament_type, date))
+                tournaments_to_load.append(
+                    (tournament_id, name, gtd, buy_in, total_buy_in, amount_of_players, speed, tournament_type, date))
 
-            for i in tournaments_to_load:
-                tournament_id, name, gtd, buy_in, total_buy_in, amount_of_players, speed, tournament_type, date = i
-                if not is_there_tournament(tournament_id):
-                    add_tournament(tournament_id, name, gtd, buy_in, total_buy_in, amount_of_players, speed,
-                                   tournament_type, date)
-
+                for i in tournaments_to_load:
+                    tournament_id, name, gtd, buy_in, total_buy_in, amount_of_players, speed, tournament_type, date = i
+                    if not is_there_tournament(tournament_id):
+                        add_tournament(tournament_id, name, gtd, buy_in, total_buy_in, amount_of_players, speed,
+                                       tournament_type, date)
+            except:
+                pass
         print('Турниры кончились')
         #fix_comma_in_db()
         fix_tournament_info()
