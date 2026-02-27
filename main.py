@@ -1,7 +1,3 @@
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.SNIMissingWarning)
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 import re
 import traceback
 import xml.etree.ElementTree as ET
